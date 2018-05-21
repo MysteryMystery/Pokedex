@@ -17,6 +17,7 @@ import scala.collection.JavaConverters._
   * Dont need any JSON anymore.
   * //TODO reword this class to purely save/load files. can be yaml or sql. Will be used as a cache with PokeAPI object
   */
+@Deprecated
 class DataHandler {
   val logger = Logger.get
   logger.log(this, logger.LogLevel.INFO, "Started Init DataHandler")

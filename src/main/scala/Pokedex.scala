@@ -1,5 +1,5 @@
 import Pokedex.pokemonListView
-import database.DataHandler
+import database.{Cache, DataHandler}
 import debug.Logger
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
@@ -29,7 +29,7 @@ object Pokedex extends JFXApp {
 
   //val databaseAccessor: DatabaseAccessor = new DatabaseAccessor
   val logger = Logger.get
-  val dataHandler = new DataHandler
+  val cache = new Cache
 
   val pokemonSearchBox: TextField = new TextField(){
     promptText = "Search for a Pokemon..."
@@ -113,7 +113,7 @@ object Pokedex extends JFXApp {
   parentPane.add(spriteBox,           0, 0, 1, 2)
   parentPane.add(typeBox,             0, 2, 1, 2)
   parentPane.add(evolutionChainBox,   1, 0, 1, 1)
-  parentPane.add(movesListBox,        2, 0, 1, 9)
+  //parentPane.add(movesListBox,        2, 0, 1, 9)
  // parentPane.add(movePane,            2, 10, 1, 1)
   parentPane.add(pokemonSearchBox,    7, 0, 1, 1)
   parentPane.add(pokemonSearchButton, 8, 0, 1, 1)
@@ -129,7 +129,8 @@ object Pokedex extends JFXApp {
     }
   }
 
-  def pokemonListView: ListView[Pokemon] = new ListView[Pokemon](dataHandler.allSavedPokemon){
+  def pokemonListView: ListView[Pokemon] = new ListView[Pokemon](cache.allSavedPokemon){
+    styleClass = Seq("pane", "listbox", "list-view")
     prefHeight = 700
     prefWidth = 200
     vgrow = Priority.Always
@@ -153,5 +154,4 @@ object Pokedex extends JFXApp {
 
   //May have to say from pokedexdata/<pokemon>.json
   def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
-
 }

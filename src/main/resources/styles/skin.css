@@ -23,6 +23,38 @@
     -fx-background-radius: 25px;
 }
 
+.listbox {
+    -fx-border-width: 5px;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+    -fx-background: transparent;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #db785c;
+    -fx-margin: 5px;
+    -fx-border-color: #2ec135;
+    -fx-text-fill: black;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+.list-view .list-cell:odd {
+    -fx-background-color: #dbd65c;
+    -fx-margin: 5px;
+    -fx-border-color: #2ec135;
+    -fx-text-fill: black;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #38c9c4;
+}
+
+.list-view .list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #38c9c4;
+}
+
 .spriteBox {
     -fx-border-color: black;
     -fx-border-style: solid;
