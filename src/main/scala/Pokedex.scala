@@ -6,6 +6,8 @@ import javafx.event
 import javafx.event.EventHandler
 import javafx.scene.control.SelectionMode
 import javafx.stage.WindowEvent
+import me.sargunvohra.lib.pokekotlin.client.{PokeApi, PokeApiClient}
+import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies
 import scalafx.application.JFXApp
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Orientation, Pos}
@@ -17,7 +19,11 @@ import scalafx.scene.text.Text
 import scalafx.stage.StageStyle
 
 import scala.collection.JavaConverters._
-import util.Pokemon
+import util.{Pokemon, PokemonMove, PokemonTypes}
+import util.PokemonTypes._
+import web.PokeAPI
+
+import scala.collection
 
 object Pokedex extends JFXApp {
 
@@ -50,14 +56,15 @@ object Pokedex extends JFXApp {
     margin = Insets(5)
   }
 
-  val typeBox: FlowPane = new FlowPane(){
-    prefWidth = 100
-    maxHeight = 25
+  val typeBox: TilePane = new TilePane {
+    orientation = Orientation.Horizontal
+    prefWidth = 120
     minHeight = 25
     styleClass = Seq("pane", "typePane")
     alignment.value = Pos.Center
     margin = Insets(5)
   }
+  setPokemonTypes(PokemonTypes.NONE)
 
   val evolutionChainBox: TilePane = new TilePane(){
     orientation = Orientation.Horizontal
@@ -69,7 +76,28 @@ object Pokedex extends JFXApp {
   }
   populateEvolutionBoxFromResources("/images/Pokeball.png", "/images/Pokeball.png", "/images/Pokeball.png")
 
-  def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
+  val movesListBox: ListView[PokemonMove] = new ListView[PokemonMove](Seq(PokemonMove(PokeAPI.pokeAPI.getMove(1)))){
+    styleClass = Seq("pane", "evoChainBox")
+    //minHeight = 400
+    prefHeight = 400
+    prefWidth = 200
+    vgrow = Priority.Always
+    selectionModel.value.setSelectionMode(SelectionMode.SINGLE)
+    selectionModel.value.selectedItemProperty.addListener(new ChangeListener[PokemonMove] {
+      override def changed(observable: ObservableValue[_ <: PokemonMove], oldValue: PokemonMove, newValue: PokemonMove): Unit = {
+        movePane.children.remove(0, movePane.children.size())
+        movePane.children.addAll(
+          new Label(observable.getValue.move.getDamageClass.getName),
+          new Label("Add the rest of the move info here")
+        )
+      }
+    })
+  }
+
+  val movePane: FlowPane = new FlowPane(){
+    styleClass = Seq("pane", "evoChainBox")
+    orientation = Orientation.Vertical
+  }
 
   val parentPane: GridPane = new GridPane(){
     padding = Insets(25)
@@ -77,12 +105,16 @@ object Pokedex extends JFXApp {
     //vgap = 5
     prefHeight = 500
     prefWidth = 800
+    minHeight = 500
+    minWidth = 800
     vgrow = Priority.Always
     hgrow = Priority.Always
   }
   parentPane.add(spriteBox,           0, 0, 1, 2)
   parentPane.add(typeBox,             0, 2, 1, 2)
   parentPane.add(evolutionChainBox,   1, 0, 1, 1)
+  parentPane.add(movesListBox,        2, 0, 1, 9)
+ // parentPane.add(movePane,            2, 10, 1, 1)
   parentPane.add(pokemonSearchBox,    7, 0, 1, 1)
   parentPane.add(pokemonSearchButton, 8, 0, 1, 1)
   parentPane.add(pokemonListView,     7, 1, 2, 10)
@@ -91,7 +123,7 @@ object Pokedex extends JFXApp {
     title.value = "Pokédex - James Attfield"
     scene = new Scene(){
       resizable.value = false
-      stylesheets.add(getClass.getResource("/styles/skin.css").toExternalForm)
+      stylesheets.addAll(getClass.getResource("/styles/skin.css").toExternalForm, getClass.getResource("/styles/types.css").toExternalForm)
       root = parentPane
       initStyle(StageStyle.Decorated)
     }
@@ -110,10 +142,16 @@ object Pokedex extends JFXApp {
     })
   }
 
-  def typeLabel(typ: String): Label = {
-    new Label(typ){
-      style = "-fx-background-color: #333;"
-      //Style according to colour types
+  def typeLabel(typ: PokemonType): Label = new Label(typ.toString){
+      id.value = if (typ == PokemonTypes.NONE) "???" else typ.toString.toLowerCase()
+      styleClass = Seq("typeLabel")
     }
+
+  def setPokemonTypes(types: PokemonType*): Unit = {
+    typeBox.children = types.map(typeLabel)
   }
+
+  //May have to say from pokedexdata/<pokemon>.json
+  def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
+
 }

@@ -3,12 +3,20 @@ package database
 import java.io.File
 import java.nio.file.Files
 
+import com.google.gson.{Gson, JsonArray, JsonElement}
 import debug.Logger
-import net.liftweb.json._
+import javafx.scene.image
+import me.sargunvohra.lib.pokekotlin.model.PokemonSprites
+import scalafx.scene.image.Image
 import util.Pokemon
+import web.PokeAPI
 
 import scala.collection.JavaConverters._
 
+/**
+  * Dont need any JSON anymore.
+  * //TODO reword this class to purely save/load files. can be yaml or sql. Will be used as a cache with PokeAPI object
+  */
 class DataHandler {
   val logger = Logger.get
   logger.log(this, logger.LogLevel.INFO, "Started Init DataHandler")
@@ -34,13 +42,13 @@ class DataHandler {
     * @param pokemonName
     * @return JSON value corresponding to that pokemon
     */
-  def load(pokemonName: String): JValue = {
+  def load(pokemonName: String): JsonArray = {
     logger.log(this, logger.LogLevel.INFO, s"LOADING $pokemonName")
     val of = getFile(pokemonName)
     if (of.isDefined)
-      parse(Files.lines(of.get.toPath).toArray.mkString(""))
+      gson.toJsonTree(Files.lines(of.get.toPath).toArray.mkString("")).getAsJsonArray
     else
-      parse("")
+      gson.toJsonTree("").getAsJsonArray
   }
 
   /**
@@ -48,13 +56,13 @@ class DataHandler {
     * @param pokemonID
     * @return JSON value corresponding to that pokemon
     */
-  def load(pokemonID: Int): JValue = {
+  def load(pokemonID: Int): JsonArray = {
     logger.log(this, logger.LogLevel.INFO, s"LOADING $pokemonID")
     val of = getFile(pokemonID.toString)
     if (of.isDefined)
-      parse(Files.lines(of.get.toPath).toArray.mkString(""))
+      gson.toJsonTree(Files.lines(of.get.toPath).toArray.mkString("")).getAsJsonArray
     else
-      parse("")
+      gson.toJsonTree("").getAsJsonArray
   }
 
   def allSavedPokemon: Seq[Pokemon] = {
@@ -77,13 +85,5 @@ class DataHandler {
     these ++ these.filter(_.isDirectory).flatMap(getRecursiveListOfFiles)
   }
 
-  private def pokeAPIKeys(levelKey: String = ""): Seq[String] = {
-    logger.log(this, logger.LogLevel.INFO, s"Getting API keys...")
-    if (levelKey == ""){
-      //iterate root
-    } else{
-      //iterate that level
-    }
-    Seq()
-  }
+  def gson = new Gson()
 }

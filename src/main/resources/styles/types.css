@@ -1,3 +1,7 @@
+#??? {
+
+}
+
 #normal {
    -fx-background-color: #9C531F;
 }
@@ -12,4 +16,60 @@
 
 #poison {
     -fx-background-color: #A040A0;
+}
+
+#ground {
+    -fx-background-color: #E0CDBC;
+}
+
+#rock {
+    -fx-background-color: #B8A038;
+}
+
+#bug {
+    -fx-background-color: #A8B820;
+}
+
+#ghost {
+    -fx-background-color: #7058C0;
+}
+
+#steel {
+    -fx-background-color: #B8B8D0;
+}
+
+#fire {
+    -fx-background-color: #F08030;
+}
+
+#water {
+    -fx-background-color: #6890F0;
+}
+
+#grass {
+    -fx-background-color: #78C850;
+}
+
+#electric {
+    -fx-background-color: #FBD030;
+}
+
+#psychic {
+    -fx-background-color: #FD9888;
+}
+
+#ice {
+    -fx-background-color: #98E7F4;
+}
+
+#dragon {
+    -fx-background-color: #A738F8;
+}
+
+#dark {
+    -fx-background-color: #705848;
+}
+
+#fairy {
+    -fx-background-color: #FFE1CC;
 }

@@ -13,6 +13,8 @@ object Logger {
 }
 
 class Logger {
+  import LogLevel.LogLevel
+
   private[this] val logSpace: TextArea = new TextArea(){
     //padding = Insets(25)
     prefHeight = 300
@@ -40,7 +42,7 @@ class Logger {
     show
   }
 
-  def log(obj: Any, logLevel: LogLevel.LogLevel,str: String): Unit = {
+  def log(obj: Any, logLevel: LogLevel,str: String): Unit = {
     logSpace.text.value += s"[${new java.util.Date()}][${logLevel.toString}](${obj.getClass.getName}) $str\n"
   }
 

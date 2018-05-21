@@ -32,20 +32,5 @@
 .typeLabel {
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
-}
-
-#normal {
-   -fx-background-color: #9C531F;
-}
-
-#fighting {
-    -fx-background-color: #D83028;
-}
-
-#flying {
-    -fx-background-color: #A8A7F8;
-}
-
-#poison {
-    -fx-background-color: #A040A0;
+    -fx-text-align: center;
 }
