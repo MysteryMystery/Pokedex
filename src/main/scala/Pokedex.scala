@@ -1,5 +1,5 @@
 import Pokedex.pokemonListView
-import database.{DataHandler, DatabaseAccessor}
+import database.DataHandler
 import debug.Logger
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
@@ -8,10 +8,13 @@ import javafx.scene.control.SelectionMode
 import javafx.stage.WindowEvent
 import scalafx.application.JFXApp
 import scalafx.event.ActionEvent
-import scalafx.geometry.Insets
+import scalafx.geometry.{Insets, Orientation, Pos}
 import scalafx.scene.Scene
-import scalafx.scene.control.{Button, ListView, TextField}
-import scalafx.scene.layout.{GridPane, Priority}
+import scalafx.scene.control.{Button, Label, ListView, TextField}
+import scalafx.scene.image.{Image, ImageView}
+import scalafx.scene.layout.{FlowPane, GridPane, Priority, TilePane}
+import scalafx.scene.text.Text
+import scalafx.stage.StageStyle
 
 import scala.collection.JavaConverters._
 import util.Pokemon
@@ -38,23 +41,59 @@ object Pokedex extends JFXApp {
     }
   }
 
+  val spriteBox: ImageView = new ImageView(){
+    image.value = new Image(new javafx.scene.image.Image(getClass.getResource("/images/Pokeball.png").toExternalForm))
+    fitWidth.value = 100
+    preserveRatio.value = true
+    smooth = true
+    styleClass = Seq("pane", "spriteBox")
+    margin = Insets(5)
+  }
+
+  val typeBox: FlowPane = new FlowPane(){
+    prefWidth = 100
+    maxHeight = 25
+    minHeight = 25
+    styleClass = Seq("pane", "typePane")
+    alignment.value = Pos.Center
+    margin = Insets(5)
+  }
+
+  val evolutionChainBox: TilePane = new TilePane(){
+    orientation = Orientation.Horizontal
+    styleClass = Seq("pane", "evoChainBox")
+    maxHeight = 30
+    maxWidth = 100
+    alignment.value = Pos.Center
+    margin = Insets(5)
+  }
+  populateEvolutionBoxFromResources("/images/Pokeball.png", "/images/Pokeball.png", "/images/Pokeball.png")
+
+  def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
+
   val parentPane: GridPane = new GridPane(){
     padding = Insets(25)
+    //hgap = 5
+    //vgap = 5
     prefHeight = 500
     prefWidth = 800
     vgrow = Priority.Always
     hgrow = Priority.Always
   }
-  parentPane.add(pokemonSearchBox,    7, 1, 1, 1)
-  parentPane.add(pokemonSearchButton, 8, 1, 1, 1)
-  parentPane.add(pokemonListView,     7, 2, 2, 10)
+  parentPane.add(spriteBox,           0, 0, 1, 2)
+  parentPane.add(typeBox,             0, 2, 1, 2)
+  parentPane.add(evolutionChainBox,   1, 0, 1, 1)
+  parentPane.add(pokemonSearchBox,    7, 0, 1, 1)
+  parentPane.add(pokemonSearchButton, 8, 0, 1, 1)
+  parentPane.add(pokemonListView,     7, 1, 2, 10)
 
   stage = new JFXApp.PrimaryStage {
     title.value = "Pokédex - James Attfield"
     scene = new Scene(){
       resizable.value = false
-      stylesheets.add(getClass.getResource("/skin.css").toExternalForm)
+      stylesheets.add(getClass.getResource("/styles/skin.css").toExternalForm)
       root = parentPane
+      initStyle(StageStyle.Decorated)
     }
   }
 
@@ -69,5 +108,12 @@ object Pokedex extends JFXApp {
         logger.log(this, logger.LogLevel.INFO, s"Pokemon ${observable.getValue.id} / ${observable.getValue.name} Selected in ListView[Pokemon]")
       }
     })
+  }
+
+  def typeLabel(typ: String): Label = {
+    new Label(typ){
+      style = "-fx-background-color: #333;"
+      //Style according to colour types
+    }
   }
 }

@@ -13,7 +13,6 @@ class DataHandler {
   val logger = Logger.get
   logger.log(this, logger.LogLevel.INFO, "Started Init DataHandler")
 
-  val pokeAPI: String = "https://pokeapi.co/api/v2"
   val fileNameTemplate: String = "%d_%s.json"
   val saveFolder: File = new File("pokedexdata")
   if (!saveFolder.exists())
@@ -37,7 +36,7 @@ class DataHandler {
     */
   def load(pokemonName: String): JValue = {
     logger.log(this, logger.LogLevel.INFO, s"LOADING $pokemonName")
-    val of = getFile(pokemonName.toString)
+    val of = getFile(pokemonName)
     if (of.isDefined)
       parse(Files.lines(of.get.toPath).toArray.mkString(""))
     else
@@ -67,10 +66,7 @@ class DataHandler {
     )
   }
 
-  private def getFile(pokeName: String): Option[File] = {
-    val files: Array[File] = saveFolder.listFiles
-    files.find(_.getName.contains(pokeName))
-  }
+  private def getFile(pokeName: String): Option[File] = saveFolder.listFiles.find(_.getName.contains(pokeName))
 
   private def allSaveFiles: Array[File] = {
     getRecursiveListOfFiles(saveFolder).map(_.asInstanceOf[File])

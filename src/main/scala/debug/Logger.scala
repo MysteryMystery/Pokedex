@@ -5,7 +5,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.{FlowPane, HBox, Priority, StackPane}
 import scalafx.scene.text.Text
-import scalafx.stage.Stage
+import scalafx.stage.{Stage, StageStyle}
 
 object Logger {
   private val v = new Logger
@@ -27,7 +27,7 @@ class Logger {
   private[this] val loggerWindow = new Stage(){
     title.value = "Logger - Pokedex"
     scene = new Scene(){
-      stylesheets.add(getClass.getResource("/skin.css").toExternalForm)
+      stylesheets.add(getClass.getResource("/styles/skin.css").toExternalForm)
       content = new StackPane(){
         //children = logSpace
         styleClass = Seq("logger")
@@ -41,12 +41,6 @@ class Logger {
   }
 
   def log(obj: Any, logLevel: LogLevel.LogLevel,str: String): Unit = {
-    //logSpace.text.value += s"[${new java.util.Date()}] (${obj.getClass.getName}) $str\n"
-    /*val flow = new FlowPane()
-    flow.children.add(new Text(s"[${new java.util.Date()}]"))
-    flow.children.add(new Text(s"[${logLevel.toString}]") {style=s"-fx-text-fill: ${logLevel match {case LogLevel.DEBUG => "#432ec9" case LogLevel.WARN => "#ce412b" case _ => "black"}}"})
-    flow.children.add(new Text(s"(${obj.getClass.getName}) $str"))*/
-
     logSpace.text.value += s"[${new java.util.Date()}][${logLevel.toString}](${obj.getClass.getName}) $str\n"
   }
 

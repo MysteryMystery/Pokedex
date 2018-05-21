@@ -1,0 +1,51 @@
+.root {
+    -fx-background-color: #333;
+}
+
+.logger {
+    -fx-font-size: 12;
+}
+
+.pane {
+    -fx-background-color: #37e840;
+    -fx-margin: 5px;
+    -fx-border-color: #2ec135;
+    -fx-border-width: 2px;
+}
+
+.typePane {
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
+.evoChainBox {
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
+.spriteBox {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+}
+
+.typeLabel {
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+}
+
+#normal {
+   -fx-background-color: #9C531F;
+}
+
+#fighting {
+    -fx-background-color: #D83028;
+}
+
+#flying {
+    -fx-background-color: #A8A7F8;
+}
+
+#poison {
+    -fx-background-color: #A040A0;
+}
