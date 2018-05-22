@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
 
 class Cache {
   val logger = Logger.get
-  logger.log(this, logger.LogLevel.INFO, "Started Init DataHandler")
+  logger.log(this, logger.LogLevel.INFO, "Started Init Cache")
 
   val saveFolder: File = new File("pokedexdata")
   if (!saveFolder.exists()){

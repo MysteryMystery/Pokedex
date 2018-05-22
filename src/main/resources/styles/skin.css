@@ -6,11 +6,26 @@
     -fx-font-size: 12;
 }
 
-.pane {
-    -fx-background-color: #37e840;
-    -fx-margin: 5px;
+.text-field {
+  -fx-border-color: #2ec135;
+  -fx-border-width: 2px;
+}
+
+.button {
     -fx-border-color: #2ec135;
     -fx-border-width: 2px;
+}
+
+.pane {
+    -fx-background-color: #37e840;
+    -fx-border-color: #2ec135;
+    -fx-border-width: 2px;
+}
+
+.movePane {
+    -fx-background: #5eadf2;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
 }
 
 .typePane {
@@ -56,7 +71,7 @@
 }
 
 .spriteBox {
-    -fx-border-color: black;
+    -fx-background-color: white;
     -fx-border-style: solid;
     -fx-border-width: 5;
 }
@@ -65,4 +80,6 @@
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
     -fx-text-align: center;
+    -fx-border-color: #2ec135;
+    -fx-border-width: 2px;
 }
