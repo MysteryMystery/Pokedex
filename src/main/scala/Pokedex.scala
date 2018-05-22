@@ -1,10 +1,11 @@
 import Pokedex.pokemonListView
-import database.{Cache, DataHandler}
+import database.Cache
 import debug.Logger
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
 import javafx.event.EventHandler
 import javafx.scene.control.SelectionMode
+import javafx.scene.image
 import javafx.stage.WindowEvent
 import me.sargunvohra.lib.pokekotlin.client.{PokeApi, PokeApiClient}
 import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies
@@ -76,7 +77,7 @@ object Pokedex extends JFXApp {
   }
   populateEvolutionBoxFromResources("/images/Pokeball.png", "/images/Pokeball.png", "/images/Pokeball.png")
 
-  val movesListBox: ListView[PokemonMove] = new ListView[PokemonMove](Seq(PokemonMove(PokeAPI.pokeAPI.getMove(1)))){
+  val movesListBox: ListView[PokemonMove] = new ListView[PokemonMove](){
     styleClass = Seq("pane", "evoChainBox")
     //minHeight = 400
     prefHeight = 400
@@ -114,7 +115,7 @@ object Pokedex extends JFXApp {
   parentPane.add(typeBox,             0, 2, 1, 2)
   parentPane.add(evolutionChainBox,   1, 0, 1, 1)
   //parentPane.add(movesListBox,        2, 0, 1, 9)
- // parentPane.add(movePane,            2, 10, 1, 1)
+  //parentPane.add(movePane,            2, 10, 1, 1)
   parentPane.add(pokemonSearchBox,    7, 0, 1, 1)
   parentPane.add(pokemonSearchButton, 8, 0, 1, 1)
   parentPane.add(pokemonListView,     7, 1, 2, 10)
@@ -129,7 +130,7 @@ object Pokedex extends JFXApp {
     }
   }
 
-  def pokemonListView: ListView[Pokemon] = new ListView[Pokemon](cache.allSavedPokemon){
+  def pokemonListView: ListView[Pokemon] = new ListView[Pokemon](cache.loadPokemon){
     styleClass = Seq("pane", "listbox", "list-view")
     prefHeight = 700
     prefWidth = 200
@@ -154,4 +155,13 @@ object Pokedex extends JFXApp {
 
   //May have to say from pokedexdata/<pokemon>.json
   def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
+
+  def populateWindow(pokemon: Pokemon): Unit = {
+    setPokemonTypes(PokemonTypes.DRAGON, PokemonTypes.FLYING)
+    //spriteBox.image.value = new Image(new image.Image(pokemon.sprite.getFrontDefault))
+
+    logger.log(this, logger.LogLevel.DEBUG, pokemon.sprite.getFrontDefault)
+    logger.log(this, logger.LogLevel.DEBUG, pokemon.types(0).getType.toString)
+  }
+  populateWindow(Pokemon(new PokeAPI().pokeAPI.getPokemon(1)))
 }
