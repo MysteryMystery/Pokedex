@@ -22,6 +22,13 @@
     -fx-border-width: 2px;
 }
 
+.statPane {
+    -fx-background-color: #5eadf2;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-width: 10px;
+}
+
 .movePane {
     -fx-background-color: #5eadf2;
     -fx-border-radius: 25px;

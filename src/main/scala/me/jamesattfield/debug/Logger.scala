@@ -27,7 +27,7 @@ class Logger {
   }
 
   private[this] val loggerWindow = new Stage(){
-    title.value = "Logger - Pokedex"
+    title.value = "Logger - me.jamesattfield.Pokedex"
     scene = new Scene(){
       stylesheets.add(getClass.getResource("/styles/skin.css").toExternalForm)
       content = new StackPane(){

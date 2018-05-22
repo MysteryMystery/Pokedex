@@ -1,4 +1,4 @@
-Pokedex
+me.jamesattfield.Pokedex
 =======
 
 Usage

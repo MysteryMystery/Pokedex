@@ -15,3 +15,5 @@ libraryDependencies ++= Seq(
 )
 
 assemblyJarName in assembly := "PokedexExplorer.jar"
+
+//mainClass in assembly := Some("me.jamesattfield.me.jamesattfield.Pokedex")

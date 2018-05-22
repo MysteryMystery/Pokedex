@@ -47,7 +47,6 @@ object Pokedex extends JFXApp {
     preserveRatio.value = true
     smooth = true
     styleClass = Seq("pane", "spriteBox")
-   // margin = Insets(5)
     alignmentInParent = Pos.Center
   }
 
@@ -56,7 +55,6 @@ object Pokedex extends JFXApp {
     minHeight = 150
     minWidth = 150
     styleClass = Seq("pane", "spriteBox")
-   // margin = Insets(5)
   }
 
   val typeBox: TilePane = new TilePane {
@@ -67,8 +65,6 @@ object Pokedex extends JFXApp {
 
     styleClass = Seq("pane", "typePane")
     alignment.value = Pos.Center
-   // margin = Insets(5)
-   // padding = Insets(5)
   }
 
   val evolutionChainBox: TilePane = new TilePane(){
@@ -81,7 +77,6 @@ object Pokedex extends JFXApp {
     minWidth = 130
 
     alignment.value = Pos.Center
-   // margin = Insets(5)
   }
   populateEvolutionBoxSprites(EvolutionChain(PokeAPI.noPokemon))
 
@@ -91,13 +86,10 @@ object Pokedex extends JFXApp {
     prefHeight = 40
     prefWidth = 130
     alignment.value = Pos.Center
-   // margin = Insets(5)
   }
 
   val movesListBox: ListView[PokemonMove] = new ListView[PokemonMove](Seq()){
-    styleClass = Seq("pane", "evoChainBox")
-    //minHeight = 400
-    //prefHeight = 400
+    styleClass = Seq("pane", "listbox", "list-view")
     prefWidth = 200
     vgrow = Priority.Always
     selectionModel.value.setSelectionMode(SelectionMode.SINGLE)
@@ -113,7 +105,7 @@ object Pokedex extends JFXApp {
   }
 
   val movePane: FlowPane = new FlowPane(){
-    styleClass = Seq("pane", "movePane")
+    styleClass = Seq("pane", "typePane")
     orientation = Orientation.Vertical
     prefHeight = 200
     prefWidth = 200
@@ -121,7 +113,7 @@ object Pokedex extends JFXApp {
 
   val baseStatsPane: TilePane = new TilePane {
     orientation = Orientation.Vertical
-    styleClass = Seq("pane", "movePane")
+    styleClass = Seq("pane", "typePane")
     minHeight = 100
     minWidth = 100
     alignment.value = Pos.Center
@@ -132,9 +124,6 @@ object Pokedex extends JFXApp {
     //gridLinesVisible = true
     padding = Insets(25)
     prefHeight = 700
-    //prefWidth = 850
-    //minHeight = 500
-    //minWidth = 800
     vgrow = Priority.Always
     hgrow = Priority.Always
 
@@ -191,14 +180,14 @@ object Pokedex extends JFXApp {
   def populateMainSpriteBox(pokemon: Pokemon): Unit = spriteBox.image = pokemon.sprite
   def populateBaseStatsBox(stats: BaseStats): Unit = baseStatsPane.children = new VBox(){
     children = Seq(
-      new Label(s"HP: ${stats.hp}"){       id = "hp";      styleClass = Seq("baseStat"); prefWidth = 100},
-      new Label(s"ATK: ${stats.atk}"){     id = "atk";     styleClass = Seq("baseStat"); prefWidth = 100},
-      new Label(s"DEF: ${stats.defense}"){ id = "defense"; styleClass = Seq("baseStat"); prefWidth = 100},
-      new Label(s"SP.ATK: ${stats.spAtk}"){id = "spatk";   styleClass = Seq("baseStat"); prefWidth = 100},
-      new Label(s"SP.DEF: ${stats.spDef}"){id = "spdef";   styleClass = Seq("baseStat"); prefWidth = 100},
-      new Label(s"SPEED: ${stats.spd}"){   id = "spd";     styleClass = Seq("baseStat"); prefWidth = 100}
+      new Label(s"HP: ${stats.hp}"){       id = "hp";      styleClass = Seq("baseStat"); prefWidth = 150},
+      new Label(s"ATK: ${stats.atk}"){     id = "atk";     styleClass = Seq("baseStat"); prefWidth = 150},
+      new Label(s"DEF: ${stats.defense}"){ id = "defense"; styleClass = Seq("baseStat"); prefWidth = 150},
+      new Label(s"SP.ATK: ${stats.spAtk}"){id = "spatk";   styleClass = Seq("baseStat"); prefWidth = 150},
+      new Label(s"SP.DEF: ${stats.spDef}"){id = "spdef";   styleClass = Seq("baseStat"); prefWidth = 150},
+      new Label(s"SPEED: ${stats.spd}"){   id = "spd";     styleClass = Seq("baseStat"); prefWidth = 150}
     )
-    styleClass = Seq("pane", "typePane")
+    styleClass = Seq("pane", "statPane")
     alignmentInParent = Pos.CenterLeft
   }
 
@@ -211,7 +200,7 @@ object Pokedex extends JFXApp {
   }
 
   populateWindow(PokeAPI.noPokemon)
-  //populateWindow(Pokemon(25, "Pikachu"))
+  populateWindow(Pokemon(25, "Pikachu"))
 }
 
 class Pokedex
