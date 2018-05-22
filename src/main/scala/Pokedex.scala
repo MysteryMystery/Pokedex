@@ -1,5 +1,6 @@
 import Pokedex.pokemonListView
-import database.Cache
+import database.PokeAPI.PokemonTypes.PokemonType
+import database.{Cache, PokeAPI}
 import debug.Logger
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
@@ -7,8 +8,6 @@ import javafx.event.EventHandler
 import javafx.scene.control.SelectionMode
 import javafx.scene.image
 import javafx.stage.WindowEvent
-import me.sargunvohra.lib.pokekotlin.client.{PokeApi, PokeApiClient}
-import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies
 import scalafx.application.JFXApp
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Orientation, Pos}
@@ -20,9 +19,7 @@ import scalafx.scene.text.Text
 import scalafx.stage.StageStyle
 
 import scala.collection.JavaConverters._
-import util.{Pokemon, PokemonMove, PokemonTypes}
-import util.PokemonTypes._
-import web.PokeAPI
+import database.PokeAPI._
 
 import scala.collection
 
@@ -65,7 +62,6 @@ object Pokedex extends JFXApp {
     alignment.value = Pos.Center
     margin = Insets(5)
   }
-  setPokemonTypes(PokemonTypes.NONE)
 
   val evolutionChainBox: TilePane = new TilePane(){
     orientation = Orientation.Horizontal
@@ -75,7 +71,7 @@ object Pokedex extends JFXApp {
     alignment.value = Pos.Center
     margin = Insets(5)
   }
-  populateEvolutionBoxFromResources("/images/Pokeball.png", "/images/Pokeball.png", "/images/Pokeball.png")
+  populateEvolutionBoxSprites("0", "0", "0")
 
   val movesListBox: ListView[PokemonMove] = new ListView[PokemonMove](){
     styleClass = Seq("pane", "evoChainBox")
@@ -88,7 +84,7 @@ object Pokedex extends JFXApp {
       override def changed(observable: ObservableValue[_ <: PokemonMove], oldValue: PokemonMove, newValue: PokemonMove): Unit = {
         movePane.children.remove(0, movePane.children.size())
         movePane.children.addAll(
-          new Label(observable.getValue.move.getDamageClass.getName),
+          new Label(observable.getValue.name),
           new Label("Add the rest of the move info here")
         )
       }
@@ -149,19 +145,19 @@ object Pokedex extends JFXApp {
       styleClass = Seq("typeLabel")
     }
 
-  def setPokemonTypes(types: PokemonType*): Unit = {
-    typeBox.children = types.map(typeLabel)
+  def setPokemonTypes(pokemon: Pokemon): Unit = {
+    typeBox.children = pokemon.types.map(typeLabel)
   }
 
   //May have to say from pokedexdata/<pokemon>.json
-  def populateEvolutionBoxFromResources(imageLocations: String*): Unit = evolutionChainBox.children = imageLocations.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(loc).toExternalForm)); fitWidth = 30; fitHeight = 30})
+  def populateEvolutionBoxSprites(imageNames: String*): Unit = evolutionChainBox.children = imageNames.map(loc => new ImageView(){image.value = new Image(new javafx.scene.image.Image(getClass.getResource(s"/images/sprites/$loc.png").toExternalForm)); fitWidth = 30; fitHeight = 30})
+  def populateEvolutionBoxSprites(evoChain: EvolutionChain): Unit = evolutionChainBox.children = evoChain.map(p => new ImageView(){image.value = p.sprite; fitWidth = 30; fitHeight = 30})
+  def populateMainSpriteBox(pokemon: Pokemon): Unit = spriteBox.image = pokemon.sprite
 
   def populateWindow(pokemon: Pokemon): Unit = {
-    setPokemonTypes(PokemonTypes.DRAGON, PokemonTypes.FLYING)
-    //spriteBox.image.value = new Image(new image.Image(pokemon.sprite.getFrontDefault))
-
-    logger.log(this, logger.LogLevel.DEBUG, pokemon.sprite.getFrontDefault)
-    logger.log(this, logger.LogLevel.DEBUG, pokemon.types(0).getType.toString)
+    setPokemonTypes(pokemon)
+    populateMainSpriteBox(pokemon)
   }
-  populateWindow(Pokemon(new PokeAPI().pokeAPI.getPokemon(1)))
+
+  populateWindow(Pokemon(1, "Bulbasaur"))
 }
