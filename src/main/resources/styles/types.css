@@ -1,5 +1,5 @@
 #none {
-
+   -fx-background-color: #f2f5f7;
 }
 
 #normal {
@@ -72,4 +72,33 @@
 
 #fairy {
     -fx-background-color: #FFE1CC;
+}
+
+.baseStat {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold
+}
+
+#hp {
+    -fx-background-color: #FF5959;
+}
+
+#atk {
+    -fx-background-color: #F5AC78;
+}
+
+#defense {
+    -fx-background-color: #FAE078;
+}
+
+#spatk {
+    -fx-background-color: #9DB7F5;
+}
+
+#spdef {
+    -fx-background-color: #A7DB8D;
+}
+
+#spd {
+    -fx-background-color: #FA92B2;
 }

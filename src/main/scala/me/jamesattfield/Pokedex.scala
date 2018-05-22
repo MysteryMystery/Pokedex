@@ -1,27 +1,22 @@
-import Pokedex.pokemonListView
-import database.PokeAPI.PokemonTypes.PokemonType
-import database.{Cache, PokeAPI}
-import debug.Logger
+package me.jamesattfield
+
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
-import javafx.event.EventHandler
 import javafx.scene.control.SelectionMode
 import javafx.scene.image
-import javafx.stage.WindowEvent
+import me.jamesattfield.database.PokeAPI.PokemonTypes.PokemonType
+import me.jamesattfield.database.PokeAPI.{BaseStats, EvolutionChain, Pokemon, PokemonMove}
+import me.jamesattfield.database.{Cache, PokeAPI}
+import me.jamesattfield.debug.Logger
 import scalafx.application.JFXApp
-import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Orientation, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label, ListView, TextField}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout._
-import scalafx.scene.text.Text
 import scalafx.stage.StageStyle
 
 import scala.collection.JavaConverters._
-import database.PokeAPI._
-
-import scala.collection
 
 object Pokedex extends JFXApp {
 
@@ -136,8 +131,6 @@ object Pokedex extends JFXApp {
   val parentPane: GridPane = new GridPane(){
     //gridLinesVisible = true
     padding = Insets(25)
-    //hgap = 5
-    //vgap = 5
     prefHeight = 700
     //prefWidth = 850
     //minHeight = 500
@@ -158,36 +151,6 @@ object Pokedex extends JFXApp {
   parentPane.add(pokemonSearchBox,    4, 0, 1, 1)
   parentPane.add(pokemonSearchButton, 5, 0, 1, 1)
   parentPane.add(pokemonListView,     4, 1, 2, 5)
-
-  /*val parentPane: BorderPane = new BorderPane() {
-    vgrow = Priority.Always
-    hgrow = Priority.Always
-    prefHeight = 1000
-    prefWidth = 1200
-    left = new VBox(){
-      children = Seq()
-      children = Seq(new HBox(){
-        children = Seq(new VBox(){
-          top = spriteWrapper
-          bottom = typeBox
-        }, new VBox(){
-          top = evolutionChainBox
-          bottom = formsBox
-        })
-      }, baseStatsPane)
-    }
-    /*right = new HBox() {
-      left = new VBox() {
-        top = movesListBox
-        bottom = movePane
-      }
-      right = new VBox() {
-          top = new HBox() {
-            children = Seq(pokemonSearchBox, pokemonSearchButton)
-          }
-      }
-    }*/
-  }*/
 
   stage = new JFXApp.PrimaryStage {
     title.value = "Pokédex - James Attfield"
@@ -226,13 +189,29 @@ object Pokedex extends JFXApp {
   def populateEvolutionBoxSprites(evoChain: EvolutionChain): Unit = evolutionChainBox.children = evoChain.map(p => new ImageView(){image.value = p.sprite; fitWidth = 40; fitHeight = 40;})
   def populateFormsBoxSprites(forms: Seq[Image]): Unit = formsBox.children = forms.map(i => new ImageView(){image = i; fitHeight = 40; fitWidth = 40;})
   def populateMainSpriteBox(pokemon: Pokemon): Unit = spriteBox.image = pokemon.sprite
+  def populateBaseStatsBox(stats: BaseStats): Unit = baseStatsPane.children = new VBox(){
+    children = Seq(
+      new Label(s"HP: ${stats.hp}"){       id = "hp";      styleClass = Seq("baseStat"); prefWidth = 100},
+      new Label(s"ATK: ${stats.atk}"){     id = "atk";     styleClass = Seq("baseStat"); prefWidth = 100},
+      new Label(s"DEF: ${stats.defense}"){ id = "defense"; styleClass = Seq("baseStat"); prefWidth = 100},
+      new Label(s"SP.ATK: ${stats.spAtk}"){id = "spatk";   styleClass = Seq("baseStat"); prefWidth = 100},
+      new Label(s"SP.DEF: ${stats.spDef}"){id = "spdef";   styleClass = Seq("baseStat"); prefWidth = 100},
+      new Label(s"SPEED: ${stats.spd}"){   id = "spd";     styleClass = Seq("baseStat"); prefWidth = 100}
+    )
+    styleClass = Seq("pane", "typePane")
+    alignmentInParent = Pos.CenterLeft
+  }
 
   def populateWindow(pokemon: Pokemon): Unit = {
     setPokemonTypes(pokemon)
     populateMainSpriteBox(pokemon)
     populateEvolutionBoxSprites(pokemon.evoChain)
     populateFormsBoxSprites(pokemon.forms)
+    populateBaseStatsBox(pokemon.baseStats)
   }
 
   populateWindow(PokeAPI.noPokemon)
+  //populateWindow(Pokemon(25, "Pikachu"))
 }
+
+class Pokedex

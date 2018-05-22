@@ -1,4 +1,4 @@
-package debug
+package me.jamesattfield.debug
 
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene

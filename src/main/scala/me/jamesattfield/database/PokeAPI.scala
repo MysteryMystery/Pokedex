@@ -1,14 +1,19 @@
-package database
+package me.jamesattfield.database
 
 import java.io.File
 import java.nio.file.Files
+import java.util.regex.Pattern
 
-import database.PokeAPI.MoveCategories.MoveCategory
-import database.PokeAPI.PokemonTypes.PokemonType
-import debug.Logger
+import me.jamesattfield.database.PokeAPI.MoveCategories.MoveCategory
+import me.jamesattfield.database.PokeAPI.PokemonTypes.PokemonType
+import me.jamesattfield.debug.Logger
 
 import scala.collection.JavaConverters._
 import javafx.scene.image
+import me.jamesattfield.Pokedex
+import org.reflections.Reflections
+import org.reflections.scanners.ResourcesScanner
+import org.reflections.util.{ClasspathHelper, ConfigurationBuilder}
 import scalafx.scene.image.Image
 
 import scala.collection.mutable.ListBuffer
@@ -22,18 +27,14 @@ object PokeAPI {
 
     def forms: Seq[Image] = {
       //new File(getClass.getResource("/images/sprites").getPath).listFiles().toList.filter(_.getName.contains(pokemon.id.toString)).map(m => new Image(new image.Image(m.getPath)))
-      var tr = ListBuffer[Image]()
-      try {
-        tr += new Image(new image.Image(getClass.getResource(s"/images/sprites/${pokemon.id}-mega.png").toExternalForm))
-      } catch {
-        case _ =>
-      }
-      try {
-        tr += new Image(new image.Image(getClass.getResource(s"/images/sprites/${pokemon.id}-alola.png").toExternalForm))
-      } catch {
-        case _ =>
-      }
-      tr
+
+      new Reflections(
+        new ConfigurationBuilder()
+          .setUrls(ClasspathHelper.forClass(classOf[Pokedex]))
+          .setScanners(
+            new ResourcesScanner()
+          )
+      ).getResources(Pattern.compile(s"^${pokemon.id}(-.*)?\\.png")).asScala.map(i => new Image(new image.Image(i))).toList
     }
 
     def evoChain: EvolutionChain = {

@@ -23,9 +23,10 @@
 }
 
 .movePane {
-    -fx-background: #5eadf2;
+    -fx-background-color: #5eadf2;
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
+    -fx-border-width: 5px;
 }
 
 .typePane {

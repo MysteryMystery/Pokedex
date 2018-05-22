@@ -1,10 +1,10 @@
-package database
+package me.jamesattfield.database
 
 import java.io._
 import java.nio.file.{Files, Path, Paths}
 
-import database.PokeAPI.Pokemon
-import debug.Logger
+import me.jamesattfield.database.PokeAPI.Pokemon
+import me.jamesattfield.debug.Logger
 
 import scala.collection.mutable
 import scala.collection.JavaConverters._
