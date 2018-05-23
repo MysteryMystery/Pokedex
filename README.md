@@ -9,7 +9,7 @@ For producing a jar: sbt assembly
 Plan
 ----
 ### Data Storage
-An SQLite me.jamesattfield.database come packaged thanks to PokeAPI V2.
+An SQLite database comes packaged thanks to PokeAPI V2.
 
 TODO
 ----

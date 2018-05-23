@@ -27,7 +27,6 @@ object PokeAPI {
 
     def forms: Seq[Image] = {
       //new File(getClass.getResource("/images/sprites").getPath).listFiles().toList.filter(_.getName.contains(pokemon.id.toString)).map(m => new Image(new image.Image(m.getPath)))
-
       new Reflections(
         new ConfigurationBuilder()
           .setUrls(ClasspathHelper.forClass(classOf[Pokedex]))
@@ -37,27 +36,29 @@ object PokeAPI {
       ).getResources(Pattern.compile(s"^${pokemon.id}(-.*)?\\.png")).asScala.map(i => new Image(new image.Image(i))).toList
     }
 
+    //TODO Sql Magic
     def evoChain: EvolutionChain = {
       if (pokemon.id == 0)
         return EvolutionChain(pokemon, pokemon, pokemon)
       //SQL magic here
-      EvolutionChain(Pokemon(1, "Bulbasaur"), Pokemon(2, "Ivysaur"), Pokemon(3, "Venusaur"))
+      if (pokemon.id == 1) EvolutionChain(Pokemon(1, "Bulbasaur"), Pokemon(2, "Ivysaur"), Pokemon(3, "Venusaur"))
+      else EvolutionChain(Pokemon(7, "Squirtle"), Pokemon(8, "Wartortle"), Pokemon(9, "Blastoise"))
     }
-
+    //TODO Sql Magic
     def baseStats: BaseStats = {
       if (pokemon.id == 0)
         return BaseStats(0,0,0,0,0,0)
       //Some SQL magic here
       BaseStats(45, 49, 49, 65, 65, 45)
     }
-
+    //TODO Sql Magic
     def moveList: Seq[PokemonMove] = {
       if (pokemon.id == 0)
         return Seq()
       //Some SQL magic here
       Seq(PokemonMove(1, "Pound", PokemonTypes.NORMAL, MoveCategories.PHYSICAL, "Hits the target"))
     }
-
+    //TODO Sql Magic
     def types: Seq[PokemonType] = {
       if (pokemon.id == 0)
         return Seq(PokemonTypes.NONE)

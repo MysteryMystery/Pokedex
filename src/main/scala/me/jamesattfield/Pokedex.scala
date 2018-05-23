@@ -2,17 +2,20 @@ package me.jamesattfield
 
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event
+import javafx.event.EventHandler
 import javafx.scene.control.SelectionMode
-import javafx.scene.image
+import javafx.scene.{image, input}
 import me.jamesattfield.database.PokeAPI.PokemonTypes.PokemonType
 import me.jamesattfield.database.PokeAPI.{BaseStats, EvolutionChain, Pokemon, PokemonMove}
 import me.jamesattfield.database.{Cache, PokeAPI}
 import me.jamesattfield.debug.Logger
 import scalafx.application.JFXApp
+import scalafx.collections.ObservableBuffer
 import scalafx.geometry.{Insets, Orientation, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label, ListView, TextField}
 import scalafx.scene.image.{Image, ImageView}
+import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout._
 import scalafx.stage.StageStyle
 
@@ -95,8 +98,13 @@ object Pokedex extends JFXApp {
     selectionModel.value.setSelectionMode(SelectionMode.SINGLE)
     selectionModel.value.selectedItemProperty.addListener(new ChangeListener[PokemonMove] {
       override def changed(observable: ObservableValue[_ <: PokemonMove], oldValue: PokemonMove, newValue: PokemonMove): Unit = {
-        movePane.children.remove(0, movePane.children.size())
+        /*movePane.children.remove(0, movePane.children.size())
         movePane.children.addAll(
+          new Label(observable.getValue.name),
+          new Label("Add the rest of the move info here")
+        )*/
+
+        movePane.children = Seq(
           new Label(observable.getValue.name),
           new Label("Add the rest of the move info here")
         )
@@ -109,6 +117,7 @@ object Pokedex extends JFXApp {
     orientation = Orientation.Vertical
     prefHeight = 200
     prefWidth = 200
+    padding = Insets(10)
   }
 
   val baseStatsPane: TilePane = new TilePane {
@@ -121,7 +130,7 @@ object Pokedex extends JFXApp {
   }
 
   val parentPane: GridPane = new GridPane(){
-    //gridLinesVisible = true
+    gridLinesVisible = true
     padding = Insets(25)
     prefHeight = 700
     vgrow = Priority.Always
@@ -133,7 +142,7 @@ object Pokedex extends JFXApp {
   parentPane.add(spriteWrapper,       0, 0, 1, 3)
   parentPane.add(typeBox,             0, 3, 1, 1)
   parentPane.add(evolutionChainBox,   1, 0, 1, 1)
-  parentPane.add(formsBox,            1, 1, 1, 1)
+  parentPane.add(formsBox,            1, 1, 1, 3)
   parentPane.add(baseStatsPane,       0, 4, 2, 2)
   parentPane.add(movesListBox,        3, 0, 1, 5)
   parentPane.add(movePane,            3, 5, 1, 1)
@@ -161,6 +170,7 @@ object Pokedex extends JFXApp {
     selectionModel.value.selectedItemProperty.addListener(new ChangeListener[Pokemon] {
       override def changed(observable: ObservableValue[_ <: Pokemon], oldValue: Pokemon, newValue: Pokemon): Unit = {
         pokemonSearchBox.text.value = observable.getValue.name
+        populateWindow(observable.getValue)
         logger.log(this, logger.LogLevel.INFO, s"Pokemon ${observable.getValue.id} / ${observable.getValue.name} Selected in ListView[Pokemon]")
       }
     })
@@ -175,8 +185,16 @@ object Pokedex extends JFXApp {
     typeBox.children = pokemon.types.map(typeLabel)
   }
 
-  def populateEvolutionBoxSprites(evoChain: EvolutionChain): Unit = evolutionChainBox.children = evoChain.map(p => new ImageView(){image.value = p.sprite; fitWidth = 40; fitHeight = 40;})
-  def populateFormsBoxSprites(forms: Seq[Image]): Unit = formsBox.children = forms.map(i => new ImageView(){image = i; fitHeight = 40; fitWidth = 40;})
+  def populateEvolutionBoxSprites(evoChain: EvolutionChain): Unit = evolutionChainBox.children = evoChain.map(p => new ImageView(){
+    image.value = p.sprite
+    fitWidth = 40
+    fitHeight = 40
+    onMouseClicked = (event: input.MouseEvent) => {
+      populateWindow(p)
+    }
+  }
+  )
+  def populateFormsBoxSprites(forms: Seq[Image]): Unit = formsBox.children = forms.map(i => new ImageView(){image = i; fitHeight = 60; fitWidth = 60})
   def populateMainSpriteBox(pokemon: Pokemon): Unit = spriteBox.image = pokemon.sprite
   def populateBaseStatsBox(stats: BaseStats): Unit = baseStatsPane.children = new VBox(){
     children = Seq(
@@ -190,6 +208,7 @@ object Pokedex extends JFXApp {
     styleClass = Seq("pane", "statPane")
     alignmentInParent = Pos.CenterLeft
   }
+  def populateMovesList(moves: Seq[PokemonMove]): Unit = movesListBox.items = ObservableBuffer(moves)
 
   def populateWindow(pokemon: Pokemon): Unit = {
     setPokemonTypes(pokemon)
@@ -197,10 +216,12 @@ object Pokedex extends JFXApp {
     populateEvolutionBoxSprites(pokemon.evoChain)
     populateFormsBoxSprites(pokemon.forms)
     populateBaseStatsBox(pokemon.baseStats)
+    populateMovesList(pokemon.moveList)
   }
 
   populateWindow(PokeAPI.noPokemon)
-  populateWindow(Pokemon(25, "Pikachu"))
+  //populateWindow(Pokemon(25, "Pikachu"))
+  populateWindow(Pokemon(585, "deer"))
 }
 
 class Pokedex

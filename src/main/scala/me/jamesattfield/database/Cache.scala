@@ -39,6 +39,6 @@ class Cache {
   }*/
 
   def loadPokemon: Seq[Pokemon] = {
-    Seq(Pokemon(1, "Bulbasaur"))
+    Seq(Pokemon(1, "Bulbasaur"), Pokemon(7, "Squirtle"))
   }
 }
