@@ -113,7 +113,7 @@ object Pokedex extends JFXApp {
   }
 
   val movePane: FlowPane = new FlowPane(){
-    styleClass = Seq("pane", "typePane")
+    styleClass = Seq("pane", "movePane")
     orientation = Orientation.Vertical
     prefHeight = 200
     prefWidth = 200
@@ -122,7 +122,7 @@ object Pokedex extends JFXApp {
 
   val baseStatsPane: TilePane = new TilePane {
     orientation = Orientation.Vertical
-    styleClass = Seq("pane", "typePane")
+    styleClass = Seq("pane", "movePane")
     minHeight = 100
     minWidth = 100
     alignment.value = Pos.Center

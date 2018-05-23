@@ -1,0 +1,31 @@
+This file contains the fields in the database which are of use to this application. Not all fields are logged.
+
+PRAGMA table_info(pokemon_v2_pokemon); yields
+    ID integer, order integer, height integer, weight integer, base_experience integer, is_default bool, pokemon_species_id integer, name varcher(100)
+
+PRAGMA table_info(pokemon_v2_pokemonspecies); yields
+    ID integer
+    order integer
+    gender_rate integer
+    base_happiness integer
+    evolution_chain_id integer
+    name varchar(100)
+    evolves_from_species_id integer
+
+PRAGMA table_info(pokemon_v2_evolutionchain); yields
+    id integer
+    baby_trigger_item_id integer
+
+PRAGMA table_info(pokemon_v2_pokemonevolution);
+    id integer
+    evolved_species_id integer
+
+PRAGMA table_info(pokemon_v2_pokemonstat); yields
+
+PRAGMA table_info(pokemon_v2_pokemontype); yields
+    id integer
+    slot integer
+    pokemon_id integer
+    type_id
+
+select evolves_from_species_id from pokemon_v2_pokemonspecies where
